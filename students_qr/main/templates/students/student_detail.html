@@ -1,0 +1,348 @@
+<!-- templates/students/student_detail.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль студента - {{ student.full_name_english }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'students/css/style.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>{% block header_title %}Система управления студентами{% endblock %}</h1>
+            
+            <div class="auth-info">
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">Добро пожаловать, {{ user.username }}!</span>
+                    <form method="post" action="{% url 'students:logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'students:login' %}" class="btn-login">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Кнопка назад -->
+        <div class="back-button">
+            <a href="{% url 'students:student_list' %}" class="btn btn-secondary">← Назад к списку</a>
+        </div>
+
+        <!-- Блок 1: Полная информация о студенте -->
+        <section class="student-info-section">
+            <h2 class="section-title">Основная информация</h2>
+            <div class="student-info-grid">
+                <div class="info-group">
+                    <h3>Личные данные</h3>
+                    <div class="info-item">
+                        <span class="info-label">ФИО (английский):</span>
+                        <span class="info-value">{{ student.full_name_english }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">ФИО (арабский):</span>
+                        <span class="info-value">{{ student.full_name_arabic }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Номер паспорта:</span>
+                        <span class="info-value">{{ student.passport_number }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Дата рождения:</span>
+                        <span class="info-value">{{ student.birth_date|date:"d.m.Y" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Пол:</span>
+                        <span class="info-value">{{ student.get_gender_display }}</span>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <h3>Гражданство и проживание</h3>
+                    <div class="info-item">
+                        <span class="info-label">Гражданство:</span>
+                        <span class="info-value">{{ student.citizenship }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Страна проживания:</span>
+                        <span class="info-value">{{ student.country_of_residence }}</span>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <h3>Образование</h3>
+                    <div class="info-item">
+                        <span class="info-label">Направление подготовки:</span>
+                        <span class="info-value">{{ student.major }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Срок обучения:</span>
+                        <span class="info-value">{{ student.study_duration }} лет</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Статус:</span>
+                        <span class="info-value status-{{ student.current_status }}">
+                            {{ student.get_current_status_display }}
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Дата начала обучения:</span>
+                        <span class="info-value">{{ student.start_date|date:"d.m.Y" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Предполагаемая дата окончания:</span>
+                        <span class="info-value">{{ student.expected_end_date|date:"d.m.Y" }}</span>
+                    </div>
+                    {% if student.actual_end_date %}
+                    <div class="info-item">
+                        <span class="info-label">Фактическая дата окончания:</span>
+                        <span class="info-value">{{ student.actual_end_date|date:"d.m.Y" }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="info-group">
+                    <h3>Контактные данные</h3>
+                    <div class="info-item">
+                        <span class="info-label">Телефон:</span>
+                        <span class="info-value">{{ student.phone_number }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">{{ student.email }}</span>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <h3>Университеты</h3>
+                    {% for university in student.universities.all %}
+                    <div class="info-item">
+                        <span class="info-label">Университет:</span>
+                        <span class="info-value">{{ university.university }}</span>
+                    </div>
+                    {% empty %}
+                    <div class="info-item">
+                        <span class="info-value">Университеты не указаны</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Блок 2 и 3: Кнопки добавления документов -->
+        <!-- В student_detail.html замените actions-section на: -->
+        <section class="documents-section">
+            <h2 class="section-title">Документы студента</h2>
+            
+            <!-- Кнопки добавления -->
+                <!-- Кнопки добавления (только для администраторов) -->
+            {% if is_admin or is_superuser %}
+            <div class="action-buttons" style="margin-bottom: 2rem;">
+                <div class="action-button-group">
+                    <a href="{% url 'students:add_certificate' student.id %}" class="btn btn-primary btn-large">
+                        📄 Добавить справку
+                    </a>
+                    <p class="action-description">Добавить новую справку для студента</p>
+                </div>
+
+                <div class="action-button-group">
+                    <a href="{% url 'students:add_diploma' student.id %}" class="btn btn-primary btn-large">
+                        🎓 Добавить диплом
+                    </a>
+                    <p class="action-description">Добавить новый диплом для студента</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Список справок -->
+            {% if certificates %}
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">Справки</h3>
+            <div class="documents-grid">
+                {% for certificate in certificates %}
+                <div class="document-card">
+                    <div class="document-header">
+                        <h4 class="document-title">Справка №{{ certificate.certificate_number }}</h4>
+                        <span class="document-type">{{ certificate.get_certificate_type_display }}</span>
+                    </div>
+                    <div class="document-info">
+                        <div class="document-info-item">
+                            <span class="document-info-label">Тип:</span>
+                            <span class="document-info-value">{{ certificate.get_certificate_type_display }}</span>
+                        </div>
+                        <div class="document-info-item">
+                            <span class="document-info-label">Дата выдачи:</span>
+                            <span class="document-info-value">{{ certificate.issue_date|date:"d.m.Y" }}</span>
+                        </div>
+                        <div class="document-info-item">
+                            <span class="document-info-label">Учреждение:</span>
+                            <span class="document-info-value">{{ certificate.issuing_institution }}</span>
+                        </div>
+                        <div class="document-info-item">
+                            <span class="document-info-label">Цель:</span>
+                            <span class="document-info-value">{{ certificate.get_purpose_display }}</span>
+                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="{% url 'students:certificate_detail' student.id certificate.id %}" class="btn btn-view">
+                            👁️ Открыть
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Список дипломов -->
+            {% if diplomas %}
+            <h3 style="color: #2c3e50; margin-bottom: 1rem; margin-top: 2rem;">Дипломы</h3>
+            <div class="documents-grid">
+                {% for diploma in diplomas %}
+                <div class="document-card">
+                    <div class="document-header">
+                        <h4 class="document-title">Диплом №{{ diploma.diploma_number }}</h4>
+                        <span class="document-type">{{ diploma.get_diploma_type_display }}</span>
+                    </div>
+                    <div class="document-info">
+                        <div class="document-info-item">
+                            <span class="document-info-label">Тип:</span>
+                            <span class="document-info-value">{{ diploma.get_diploma_type_display }}</span>
+                        </div>
+                        <div class="document-info-item">
+                            <span class="document-info-label">Серия:</span>
+                            <span class="document-info-value">{{ diploma.diploma_series }}</span>
+                        </div>
+                        <div class="document-info-item">
+                            <span class="document-info-label">Дата выдачи:</span>
+                            <span class="document-info-value">{{ diploma.issue_date|date:"d.m.Y" }}</span>
+                        </div>
+                        <div class="document-info-item">
+                            <span class="document-info-label">Уровень:</span>
+                            <span class="document-info-value">{{ diploma.get_education_level_display }}</span>
+                        </div>
+                        <div class="document-info-item">
+                            <span class="document-info-label">Статус:</span>
+                            <span class="document-info-value status-{{ diploma.document_status }}">
+                                {{ diploma.get_document_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <a href="{% url 'students:diploma_detail' student.id diploma.id %}" class="btn btn-view">
+                            👁️ Открыть
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if not certificates and not diplomas %}
+            <div class="empty-state" style="text-align: center; padding: 3rem; color: #7f8c8d;">
+                <p>Нет добавленных документов</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="document-detail-section">
+            <h2 class="section-title">Чек оплаты #{{ receipt.id }}</h2>
+    
+            <div class="document-info-grid">
+                <div class="info-group">
+                    <h3>Информация о чеке</h3>
+                    <div class="info-item">
+                        <span class="info-label">ID чека:</span>
+                        <span class="info-value">#{{ receipt.id }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Студент:</span>
+                        <span class="info-value">{{ student.full_name_english }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Дата загрузки:</span>
+                        <span class="info-value">{{ receipt.upload_date|date:"d.m.Y H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Изображение чека -->
+            <div class="document-scan-section">
+                <h3 class="section-title">Чек оплаты</h3>
+                
+                {% if receipt.payment_receipt %}
+                    <div class="scan-container">
+                        {% if receipt.payment_receipt.url|lower|slice:'-4:' == '.pdf' %}
+                            <!-- Для PDF файлов -->
+                            <div class="pdf-viewer">
+                                <iframe src="{{ receipt.payment_receipt.url }}" 
+                                        width="100%" 
+                                        height="600px" 
+                                        style="border: 1px solid #ddd; border-radius: 8px;">
+                                    Ваш браузер не поддерживает просмотр PDF. 
+                                    <a href="{{ receipt.payment_receipt.url }}" download>Скачайте файл</a>
+                                </iframe>
+                                <div class="scan-actions">
+                                    <a href="{{ receipt.payment_receipt.url }}" 
+                                    download 
+                                    class="btn btn-download">
+                                        📥 Скачать PDF
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <!-- Для изображений -->
+                            <div class="image-viewer">
+                                <img src="{{ receipt.payment_receipt.url }}" 
+                                    alt="Чек оплаты #{{ receipt.id }}"
+                                    class="scan-image">
+                                <div class="scan-actions">
+                                    <a href="{{ receipt.payment_receipt.url }}" 
+                                    download 
+                                    class="btn btn-download">
+                                        📥 Скачать изображение
+                                    </a>
+                                    <button onclick="zoomImage()" class="btn btn-primary">
+                                        🔍 Увеличить
+                                    </button>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="no-scan">
+                        <p>Файл чека не загружен</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="organization-info">
+                <h3>Международный образовательный центр</h3>
+                <p>Адрес: г. Москва, ул. Студенческая, д. 15</p>
+                <p>Телефон: +7 (495) 123-45-67</p>
+                <p>Email: info@edu-center.ru</p>
+                <p>&copy; 2025 Все права защищены</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function addCertificate() {
+            alert('Функция "Добавить справку" будет реализована позже');
+        }
+
+        function addDiploma() {
+            alert('Функция "Добавить диплом" будет реализована позже');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!-- templates/students/add_diploma.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить диплом - {{ student.full_name_english }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'students/css/style.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>{% block header_title %}добавление диплома{% endblock %}</h1>
+            
+            <div class="auth-info">
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">Добро пожаловать, {{ user.username }}!</span>
+                    <form method="post" action="{% url 'students:logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'students:login' %}" class="btn-login">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="back-button">
+            <a href="{% url 'students:student_detail' student.id %}" class="btn btn-secondary">← Назад к профилю</a>
+        </div>
+
+        <div class="form-container">
+            <h2 class="section-title">Добавление диплома для {{ student.full_name_english }}</h2>
+            
+            <form method="post" enctype="multipart/form-data" class="document-form">
+                {% csrf_token %}
+                
+                <div class="form-grid">
+                    <!-- Реквизиты диплома -->
+                    <div class="form-section">
+                        <h3>Реквизиты диплома</h3>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.diploma_type.id_for_label }}">Тип диплома *</label>
+                            {{ form.diploma_type }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.diploma_number.id_for_label }}">Номер диплома *</label>
+                            {{ form.diploma_number }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.diploma_series.id_for_label }}">Серия диплома *</label>
+                            {{ form.diploma_series }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.registration_number.id_for_label }}">Регистрационный номер *</label>
+                            {{ form.registration_number }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.issue_date.id_for_label }}">Дата выдачи *</label>
+                            {{ form.issue_date }}
+                        </div>
+                    </div>
+
+                    <!-- Образовательная информация -->
+                    <div class="form-section">
+                        <h3>Образовательная информация</h3>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.major.id_for_label }}">Направление / специальность *</label>
+                            {{ form.major }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.education_level.id_for_label }}">Уровень образования *</label>
+                            {{ form.education_level }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.issuing_organization.id_for_label }}">Организация / университет *</label>
+                            {{ form.issuing_organization }}
+                        </div>
+                    </div>
+
+                    <!-- Статус и файл -->
+                    <div class="form-section">
+                        <h3>Статус и документ</h3>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.document_status.id_for_label }}">Статус документа *</label>
+                            {{ form.document_status }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.diploma_scan.id_for_label }}">Скан диплома *</label>
+                            <div class="file-upload-group">
+                                {{ form.diploma_scan }}
+                                <button type="button" class="btn btn-scan" onclick="openScanner()">
+                                    📄 Сканировать
+                                </button>
+                            </div>
+                            <small class="file-help">Поддерживаемые форматы: PDF, JPEG, PNG</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success btn-large">💾 Сохранить диплом</button>
+                    <a href="{% url 'students:student_detail' student.id %}" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="organization-info">
+                <h3>Международный образовательный центр</h3>
+                <p>&copy; 2024 Все права защищены</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function openScanner() {
+            if (confirm('Открыть приложение для сканирования? В реальной системе здесь будет запуск сканера.')) {
+                alert('Приложение для сканирования запущено. После сканирования файл будет автоматически загружен.');
+                
+                setTimeout(() => {
+                    alert('Файл успешно отсканирован и загружен в систему.');
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

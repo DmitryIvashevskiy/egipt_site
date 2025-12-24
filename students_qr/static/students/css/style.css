@@ -1,0 +1,851 @@
+/* static/students/css/style.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* Header Auth Styles */
+.header {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.auth-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-greeting {
+    font-size: 0.9rem;
+    color: #ecf0f1;
+}
+
+.btn-login {
+    background: #27ae60;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-login:hover {
+    background: #219a52;
+}
+
+.btn-logout {
+    background: #e74c3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-logout:hover {
+    background: #c0392b;
+}
+
+/* Responsive header */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .auth-info {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Main Content Styles */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 20px;
+    min-height: calc(100vh - 160px);
+}
+
+.page-title {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2rem;
+}
+
+/* Table Styles */
+.student-table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.student-table thead {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.student-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.student-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.student-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.student-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.student-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #27ae60;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background: #219a52;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #7f8c8d;
+}
+
+.empty-state td {
+    border-bottom: none !important;
+}
+
+/* Footer Styles */
+.footer {
+    background: #2c3e50;
+    color: white;
+    padding: 2rem 0;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.organization-info h3 {
+    margin-bottom: 1rem;
+    color: #ecf0f1;
+}
+
+.organization-info p {
+    margin-bottom: 0.5rem;
+    color: #bdc3c7;
+}
+
+.organization-info p:last-child {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #95a5a6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .student-table-container {
+        overflow-x: auto;
+    }
+    
+    .student-table {
+        min-width: 600px;
+    }
+    
+    .student-table th,
+    .student-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+
+
+/* Student Detail Page Styles */
+
+/* Back Button */
+.back-button {
+    margin-bottom: 2rem;
+}
+
+.btn-secondary {
+    background: #95a5a6;
+}
+
+.btn-secondary:hover {
+    background: #7f8c8d;
+}
+
+/* Section Styles */
+.section-title {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+/* Student Info Grid */
+.student-info-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.student-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.info-group h3 {
+    color: #3498db;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-left: 3px solid #3498db;
+    padding-left: 0.5rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #2c3e50;
+    flex: 1;
+}
+
+.info-value {
+    color: #34495e;
+    flex: 1;
+    text-align: right;
+}
+
+/* Status Styles */
+.status-studying { color: #27ae60; font-weight: 600; }
+.status-graduate { color: #2980b9; font-weight: 600; }
+.status-academic_leave { color: #f39c12; font-weight: 600; }
+.status-expelled { color: #e74c3c; font-weight: 600; }
+
+/* Actions Section */
+.actions-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.action-button-group {
+    text-align: center;
+    padding: 1.5rem;
+    border: 2px dashed #bdc3c7;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.action-button-group:hover {
+    border-color: #3498db;
+}
+
+.btn-large {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.action-description {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Responsive Design for Detail Page */
+@media (max-width: 768px) {
+    .student-info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .info-item {
+        flex-direction: column;
+    }
+    
+    .info-value {
+        text-align: left;
+        margin-top: 0.25rem;
+    }
+    
+    .action-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .student-info-section,
+    .actions-section {
+        padding: 1rem;
+    }
+}
+
+
+/* Form Styles */
+.form-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+.document-form {
+    max-width: 100%;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-section {
+    padding: 1.5rem;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    background: #fafbfc;
+}
+
+.form-section h3 {
+    color: #3498db;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #e1e8ed;
+    padding-bottom: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* File Upload Styles */
+.file-upload-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.file-upload-group input[type="file"] {
+    flex: 1;
+}
+
+.btn-scan {
+    background: #f39c12;
+    white-space: nowrap;
+}
+
+.btn-scan:hover {
+    background: #e67e22;
+}
+
+.file-help {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding-top: 2rem;
+    border-top: 1px solid #e1e8ed;
+}
+
+.btn-success {
+    background: #27ae60;
+}
+
+.btn-success:hover {
+    background: #219a52;
+}
+
+/* Documents List in Student Detail */
+.documents-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.documents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.document-card {
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background: #fafbfc;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.document-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.document-header {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.document-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin: 0;
+}
+
+.document-type {
+    background: #3498db;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.document-info {
+    margin-bottom: 1rem;
+}
+
+.document-info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.document-info-label {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.document-info-value {
+    color: #34495e;
+}
+
+.document-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-download {
+    background: #9b59b6;
+}
+
+.btn-download:hover {
+    background: #8e44ad;
+}
+
+/* Responsive Forms */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .form-section {
+        padding: 1rem;
+    }
+    
+    .file-upload-group {
+        flex-direction: column;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .documents-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Document Detail Pages */
+.document-detail-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+.document-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Scan Section */
+.document-scan-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #ecf0f1;
+}
+
+.scan-container {
+    margin-top: 1rem;
+}
+
+.pdf-viewer, .image-viewer {
+    text-align: center;
+}
+
+.scan-image {
+    max-width: 100%;
+    max-height: 800px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+}
+
+.scan-image:hover {
+    transform: scale(1.02);
+}
+
+.scan-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.no-scan {
+    text-align: center;
+    padding: 3rem;
+    color: #7f8c8d;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #bdc3c7;
+}
+
+/* Status styles for diploma */
+.status-active { color: #27ae60; font-weight: 600; }
+.status-replaced { color: #f39c12; font-weight: 600; }
+.status-cancelled { color: #e74c3c; font-weight: 600; }
+
+/* Document cards in student detail */
+.document-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-view {
+    background: #3498db;
+}
+
+.btn-view:hover {
+    background: #2980b9;
+}
+
+.btn-download {
+    background: #9b59b6;
+}
+
+.btn-download:hover {
+    background: #8e44ad;
+}
+
+/* Responsive for document detail */
+@media (max-width: 768px) {
+    .document-info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .scan-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .scan-image {
+        max-height: 500px;
+    }
+}
+
+
+    .form-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+    }
+    
+    .university-form {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        border: 1px solid #e9ecef;
+    }
+    
+    .university-form h4 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 0.5rem;
+    }
+    
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+    
+    .checkbox-label input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+    }
+    
+    .form-help-text {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    .error-text {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+    
+    .form-section {
+        margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+
+/* Add Student Form Styles */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    margin: 0;
+}
+
+.student-form {
+    max-width: 100%;
+}
+
+.form-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e1e8ed;
+}
+
+.form-section h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.form-help-text {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.error-text {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+/* Responsive forms */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .form-section {
+        padding: 1rem;
+    }
+}

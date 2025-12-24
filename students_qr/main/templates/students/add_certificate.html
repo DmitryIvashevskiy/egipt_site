@@ -1,0 +1,186 @@
+<!-- templates/students/add_certificate.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить справку - {{ student.full_name_english }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'students/css/style.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>{% block header_title %}Добавление сертификата{% endblock %}</h1>
+            
+            <div class="auth-info">
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">Добро пожаловать, {{ user.username }}!</span>
+                    <form method="post" action="{% url 'students:logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'students:login' %}" class="btn-login">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="back-button">
+            <a href="{% url 'students:student_detail' student.id %}" class="btn btn-secondary">← Назад к профилю</a>
+        </div>
+
+        <div class="form-container">
+            <h2 class="section-title">Добавление справки для {{ student.full_name_english }}</h2>
+            
+            <form method="post" enctype="multipart/form-data" class="document-form">
+                {% csrf_token %}
+                
+                <div class="form-grid">
+                    <!-- Основная информация -->
+                    <div class="form-section">
+                        <h3>Основная информация</h3>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.certificate_type.id_for_label }}">Тип справки *</label>
+                            {{ form.certificate_type }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.certificate_number.id_for_label }}">Номер справки *</label>
+                            {{ form.certificate_number }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.issue_date.id_for_label }}">Дата выдачи *</label>
+                            {{ form.issue_date }}
+                        </div>
+                    </div>
+
+                    <!-- Образовательная информация -->
+                    <div class="form-section">
+                        <h3>Образовательная информация</h3>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.issuing_institution.id_for_label }}">Учебное учреждение *</label>
+                            {{ form.issuing_institution }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.major.id_for_label }}">Направление / специальность *</label>
+                            {{ form.major }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.education_level.id_for_label }}">Уровень образования *</label>
+                            {{ form.education_level }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.course.id_for_label }}">Курс обучения</label>
+                            {{ form.course }}
+                        </div>
+                    </div>
+
+                    <!-- Дополнительная информация -->
+                    <div class="form-section">
+                        <h3>Дополнительная информация</h3>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.study_form.id_for_label }}">Форма обучения *</label>
+                            {{ form.study_form }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.study_period_start.id_for_label }}">Дата начала обучения *</label>
+                            {{ form.study_period_start }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.study_period_end.id_for_label }}">Дата завершения обучения *</label>
+                            {{ form.study_period_end }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.certificate_validity_period.id_for_label }}">Период действия справки</label>
+                            {{ form.certificate_validity_period }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.purpose.id_for_label }}">Цель выдачи справки *</label>
+                            {{ form.purpose }}
+                        </div>
+                    </div>
+
+                    <!-- Загрузка файла -->
+                    <div class="form-section">
+                        <h3>Скан справки</h3>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.certificate_scan.id_for_label }}">Файл справки *</label>
+                            <div class="file-upload-group">
+                                {{ form.certificate_scan }}
+                                <button type="button" class="btn btn-scan" onclick="openScanner()">
+                                    📄 Сканировать
+                                </button>
+                            </div>
+                            <small class="file-help">Поддерживаемые форматы: PDF, JPEG, PNG</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success btn-large">💾 Сохранить справку</button>
+                    <a href="{% url 'students:student_detail' student.id %}" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="organization-info">
+                <h3>Международный образовательный центр</h3>
+                <p>&copy; 2024 Все права защищены</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function openScanner() {
+            // Эмуляция открытия приложения для сканирования
+            if (confirm('Открыть приложение для сканирования? В реальной системе здесь будет запуск сканера.')) {
+                // В реальной системе здесь будет вызов API сканера
+                alert('Приложение для сканирования запущено. После сканирования файл будет автоматически загружен.');
+                
+                // Эмуляция выбора файла после сканирования
+                setTimeout(() => {
+                    const fileInput = document.querySelector('input[type="file"]');
+                    if (fileInput) {
+                        // В реальной системе здесь будет установка сканированного файла
+                        alert('Файл успешно отсканирован и загружен в систему.');
+                    }
+                }, 2000);
+            }
+        }
+
+        // Автозаполнение некоторых полей на основе типа справки
+        document.getElementById('id_certificate_type').addEventListener('change', function() {
+            const certificateType = this.value;
+            const purposeField = document.getElementById('id_purpose');
+            
+            // Автоматическая установка цели в зависимости от типа справки
+            if (certificateType === 'enrollment') {
+                purposeField.value = 'university';
+            } else if (certificateType === 'studying') {
+                purposeField.value = 'embassy';
+            }
+        });
+    </script>
+</body>
+</html>

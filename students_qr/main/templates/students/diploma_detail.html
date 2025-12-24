@@ -1,0 +1,222 @@
+<!-- templates/students/diploma_detail.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Диплом №{{ diploma.diploma_number }} - {{ student.full_name_english }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'students/css/style.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>{% block header_title %}Димплом{% endblock %}</h1>
+            
+            <div class="auth-info">
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">Добро пожаловать, {{ user.username }}!</span>
+                    <form method="post" action="{% url 'students:logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'students:login' %}" class="btn-login">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="back-button">
+            <a href="{% url 'students:student_detail' student.id %}" class="btn btn-secondary">← Назад к профилю студента</a>
+        </div>
+
+        <!-- Полная информация о дипломе -->
+        <section class="document-detail-section">
+            <h2 class="section-title">Диплом №{{ diploma.diploma_number }}</h2>
+            
+            <div class="document-info-grid">
+                <!-- Основная информация -->
+                <div class="info-group">
+                    <h3>Основная информация</h3>
+                    <div class="info-item">
+                        <span class="info-label">ФИО студента:</span>
+                        <span class="info-value">{{ student.full_name_english }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">ФИО (арабский):</span>
+                        <span class="info-value">{{ student.full_name_arabic }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Год рождения:</span>
+                        <span class="info-value">{{ student.birth_date.year }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Тип диплома:</span>
+                        <span class="info-value">{{ diploma.get_diploma_type_display }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Номер диплома:</span>
+                        <span class="info-value">{{ diploma.diploma_number }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Серия диплома:</span>
+                        <span class="info-value">{{ diploma.diploma_series }}</span>
+                    </div>
+                </div>
+
+                <!-- Реквизиты -->
+                <div class="info-group">
+                    <h3>Реквизиты диплома</h3>
+                    <div class="info-item">
+                        <span class="info-label">Регистрационный номер:</span>
+                        <span class="info-value">{{ diploma.registration_number }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Дата выдачи:</span>
+                        <span class="info-value">{{ diploma.issue_date|date:"d.m.Y" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Статус документа:</span>
+                        <span class="info-value status-{{ diploma.document_status }}">
+                            {{ diploma.get_document_status_display }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Образовательная информация -->
+                <div class="info-group">
+                    <h3>Образовательная информация</h3>
+                    <div class="info-item">
+                        <span class="info-label">Направление / специальность:</span>
+                        <span class="info-value">{{ diploma.major }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Уровень образования:</span>
+                        <span class="info-value">{{ diploma.get_education_level_display }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Организация / университет:</span>
+                        <span class="info-value">{{ diploma.issuing_organization }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Скан диплома -->
+            <div class="document-scan-section">
+                <h3 class="section-title">Скан диплома</h3>
+                
+                {% if diploma.diploma_scan %}
+                    <div class="scan-container">
+                        {% if diploma.diploma_scan.url|lower|slice:'-4:' == '.pdf' %}
+                            <!-- Для PDF файлов -->
+                            <div class="pdf-viewer">
+                                <iframe src="{{ diploma.diploma_scan.url }}" 
+                                        width="100%" 
+                                        height="600px" 
+                                        style="border: 1px solid #ddd; border-radius: 8px;">
+                                    Ваш браузер не поддерживает просмотр PDF. 
+                                    <a href="{{ diploma.diploma_scan.url }}" download>Скачайте файл</a>
+                                </iframe>
+                                <div class="scan-actions">
+                                    <a href="{{ diploma.diploma_scan.url }}" 
+                                       download 
+                                       class="btn btn-download">
+                                        📥 Скачать PDF
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <!-- Для изображений -->
+                            <div class="image-viewer">
+                                <img src="{{ diploma.diploma_scan.url }}" 
+                                     alt="Скан диплома №{{ diploma.diploma_number }}"
+                                     class="scan-image">
+                                <div class="scan-actions">
+                                    <a href="{{ diploma.diploma_scan.url }}" 
+                                       download 
+                                       class="btn btn-download">
+                                        📥 Скачать изображение
+                                    </a>
+                                    <button onclick="zoomImage()" class="btn btn-primary">
+                                        🔍 Увеличить
+                                    </button>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="no-scan">
+                        <p>Скан диплома не загружен</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- QR код диплома -->
+            {% if is_admin or is_superuser %}
+            {% if diploma.diploma_qr %}
+            <div class="document-scan-section">
+                <h3 class="section-title">QR код диплома</h3>
+                <div class="scan-container">
+                    <div class="image-viewer">
+                        <img src="{{ diploma.diploma_qr.url }}" 
+                             alt="QR код диплома №{{ diploma.diploma_number }}"
+                             class="scan-image qr-code">
+                        <div class="scan-actions">
+                            <a href="{{ diploma.diploma_qr.url }}" 
+                               download 
+                               class="btn btn-download">
+                                📥 Скачать QR код
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="organization-info">
+                <h3>Международный образовательный центр</h3>
+                <p>&copy; 2024 Все права защищены</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function zoomImage() {
+            const image = document.querySelector('.scan-image');
+            if (image && !image.classList.contains('qr-code')) {
+                if (image.style.width === '100%') {
+                    image.style.width = 'auto';
+                    image.style.height = 'auto';
+                    image.style.maxWidth = '100%';
+                    image.style.cursor = 'zoom-out';
+                } else {
+                    image.style.width = '100%';
+                    image.style.height = 'auto';
+                    image.style.cursor = 'zoom-in';
+                }
+            }
+        }
+
+        function adjustIframeHeight() {
+            const iframe = document.querySelector('iframe');
+            if (iframe) {
+                iframe.onload = function() {
+                    this.style.height = this.contentWindow.document.body.scrollHeight + 'px';
+                };
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', adjustIframeHeight);
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!-- templates/students/login.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в систему</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'students/css/style.css' %}">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .login-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .login-form input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .login-button:hover {
+            background: #2980b9;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border: 1px solid #fcc;
+        }
+        
+        .system-info {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .system-name {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .system-description {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="system-info">
+            <div class="system-name">Система управления студентами</div>
+            <div class="system-description">Для доступа к системе требуется авторизация</div>
+        </div>
+        
+        <h2 class="login-title">Вход в систему</h2>
+        
+        {% if form.errors %}
+        <div class="error-message">
+            Неверное имя пользователя или пароль. Попробуйте снова.
+        </div>
+        {% endif %}
+        
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">Имя пользователя</label>
+                <input type="text" name="username" id="id_username" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password">Пароль</label>
+                <input type="password" name="password" id="id_password" required>
+            </div>
+            
+            <input type="hidden" name="next" value="{{ next }}">
+            
+            <button type="submit" class="login-button">Войти</button>
+        </form>
+        
+        <div class="login-footer">
+            <p>Для получения доступа обратитесь к администратору</p>
+        </div>
+    </div>
+</body>
+</html>
